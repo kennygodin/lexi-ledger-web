@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { EyeIcon, EyeOffIcon } from "@hugeicons/core-free-icons";
 
-interface AuthTextInputProps<T extends FieldValues> {
+interface TextInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label: string;
@@ -30,7 +30,7 @@ interface AuthTextInputProps<T extends FieldValues> {
   maxLength?: number;
 }
 
-export function AuthTextInput<T extends FieldValues>({
+export function TextInput<T extends FieldValues>({
   control,
   name,
   label,
@@ -42,7 +42,7 @@ export function AuthTextInput<T extends FieldValues>({
   step,
   min,
   maxLength,
-}: AuthTextInputProps<T>) {
+}: TextInputProps<T>) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPasswordField = type === "password";

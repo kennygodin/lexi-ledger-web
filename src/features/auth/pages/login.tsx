@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
 import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
-import { useLogin } from "../api/use-login";
+import { useLogin } from "../api/use-login.api";
 import { useAuthStore } from "../auth.store";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { AuthTextInput } from "../components/text-input.auth";
+import { TextInput } from "../components/text-input";
 import { ErrorMessage } from "@/components/common/error-message";
 import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Invoice03Icon } from "@hugeicons/core-free-icons";
 
-export function LoginPage() {
+export function Login() {
   const navigate = useNavigate();
   const login = useLogin();
   const setSession = useAuthStore((state) => state.setSession);
@@ -27,7 +27,7 @@ export function LoginPage() {
     login.mutate(values, {
       onSuccess: (result) => {
         if (result.twoFactorRequired) {
-          navigate("/verify-otp", {
+          navigate("/verify-two-factor", {
             state: {
               email: values.email,
               verificationToken: result.verificationToken,
@@ -63,15 +63,15 @@ export function LoginPage() {
         </CardHeader>
         <CardContent className="p-0 pt-6">
           <form onSubmit={onSubmit} className="flex flex-col gap-4">
-            <AuthTextInput
+            <TextInput
               control={control}
               name="email"
               label="Email address"
               type="email"
-              placeholder="admin@javins.com"
+              placeholder="user@example.com"
               disabled={login.isPending}
             />
-            <AuthTextInput
+            <TextInput
               control={control}
               name="password"
               label="Password"
@@ -81,7 +81,7 @@ export function LoginPage() {
 
             <Link
               to="/forgot-password"
-              className="-mt-2 text-xs text-white hover:underline"
+              className="-mt-2 text-xs text-muted-foreground hover:underline"
             >
               Forgot password?
             </Link>
