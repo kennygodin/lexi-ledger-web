@@ -54,7 +54,7 @@ export function TextInput<T extends FieldValues>({
 
   return (
     <Field>
-      <FieldLabel htmlFor={name}>{label}</FieldLabel>
+      <FieldLabel className="text-sm" htmlFor={name}>{label}</FieldLabel>
 
       <Controller
         name={name}
