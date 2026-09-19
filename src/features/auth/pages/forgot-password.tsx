@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useForgotPassword } from "../api/use-forgot-password.api";
+import { useForgotPassword } from "../hooks/use-forgot-password.api";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormValues,

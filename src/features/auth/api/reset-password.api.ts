@@ -1,22 +1,26 @@
 import { apiClient } from "@/api/client.api";
 
-export interface ResetPasswordPayload {
-  token: string;
-  password: string;
-  confirmPassword: string;
+interface ApiEnvelope<T> {
+  success: boolean;
+  statusCode: number;
+  data: T;
 }
 
-export interface ResetPasswordResult {
-  reset: boolean;
+interface MessageResponseData {
   message: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
 }
 
 export async function resetPassword(
   payload: ResetPasswordPayload,
-): Promise<ResetPasswordResult> {
-  const { data } = await apiClient.post<{ message: string }>(
+): Promise<MessageResponseData> {
+  const { data } = await apiClient.post<ApiEnvelope<MessageResponseData>>(
     "/auth/reset-password",
     payload,
   );
-  return { reset: true, message: data.message };
+  return data.data;
 }

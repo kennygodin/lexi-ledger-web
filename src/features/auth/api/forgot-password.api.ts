@@ -1,17 +1,22 @@
 import { apiClient } from "@/api/client.api";
 import type { ForgotPasswordFormValues } from "../schemas/forgot-password.schema";
 
-export interface RequestPasswordResetResult {
-  sent: boolean;
+interface ApiEnvelope<T> {
+  success: boolean;
+  statusCode: number;
+  data: T;
+}
+
+interface MessageResponseData {
   message: string;
 }
 
 export async function forgotPassword(
   payload: ForgotPasswordFormValues,
-): Promise<RequestPasswordResetResult> {
-  const { data } = await apiClient.post<{ message: string }>(
+): Promise<MessageResponseData> {
+  const { data } = await apiClient.post<ApiEnvelope<MessageResponseData>>(
     "/auth/forgot-password",
     payload,
   );
-  return { sent: true, message: data.message };
+  return data.data;
 }
