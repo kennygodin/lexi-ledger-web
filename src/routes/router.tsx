@@ -8,7 +8,7 @@ import { VerifyEmail } from "@/features/auth/pages/verify-email";
 import { ProtectedRoute } from "./protected.routes";
 import { ProtectedLayout } from "@/components/layouts/protected-layout";
 import { Dashboard } from "@/features/dashboard/pages/dashboard";
-import { Statements } from "@/features/statements/pages/statments";
+import { Statements } from "@/features/statements/pages/statements";
 import { Transactions } from "@/features/transactions/pages/transactions";
 import { Budgets } from "@/features/budgets/pages/budgets";
 import { Settings } from "@/features/settings/pages/settings";
