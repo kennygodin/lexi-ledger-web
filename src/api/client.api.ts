@@ -8,7 +8,7 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().tokens?.accessToken;
+  const token = useAuthStore.getState().accessToken;
   if (token) {
     config.headers.set("Authorization", `Bearer ${token}`);
   }
@@ -17,9 +17,10 @@ apiClient.interceptors.request.use((config) => {
 
 const PUBLIC_AUTH_ENDPOINTS = [
   "/auth/login",
-  "/auth/verify-otp",
-  "/auth/resend-otp",
-  "/auth/accept-invitation",
+  "/auth/register",
+  "/auth/refresh",
+  "/auth/verify-email",
+  "/auth/resend-verification",
   "/auth/forgot-password",
   "/auth/reset-password",
 ];
@@ -30,14 +31,25 @@ function isPublicAuthEndpoint(url?: string): boolean {
 
 let refreshPromise: Promise<string> | null = null;
 
-async function refreshAccessToken(): Promise<string> {
+export async function refreshAccessToken(): Promise<string> {
+  refreshPromise ??= performRefresh().finally(() => {
+    refreshPromise = null;
+  });
+  return refreshPromise;
+}
+
+async function performRefresh(): Promise<string> {
   const { data } = await axios.post<{ data: { accessToken: string } }>(
-    "/admin/auth/refresh-token",
-    undefined,
-    { baseURL: env.apiBaseUrl, withCredentials: true },
+    "/auth/refresh",
+    { refreshToken: "" },
+    {
+      baseURL: env.apiBaseUrl,
+      withCredentials: true,
+      headers: { "X-Client-Type": "web" },
+    },
   );
 
-  useAuthStore.getState().setTokens({ accessToken: data.data.accessToken });
+  useAuthStore.getState().setAccessToken(data.data.accessToken);
   return data.data.accessToken;
 }
 
@@ -60,15 +72,12 @@ apiClient.interceptors.response.use(
     originalRequest._retry = true;
 
     try {
-      refreshPromise ??= refreshAccessToken();
-      const accessToken = await refreshPromise;
+      const accessToken = await refreshAccessToken();
       originalRequest.headers.set("Authorization", `Bearer ${accessToken}`);
       return apiClient(originalRequest);
     } catch (refreshError) {
       useAuthStore.getState().clear();
       return Promise.reject(refreshError);
-    } finally {
-      refreshPromise = null;
     }
   },
 );

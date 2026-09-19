@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import { useAuthStore } from "../auth.store";
-import { useVerifyTwoFactor } from "../api/use-verify-two-factor.api";
-import { useResendTwoFactor } from "../api/use-resend-two-factor.api";
+import { useVerifyTwoFactor } from "../hooks/use-verify-two-factor.api";
+import { useResendTwoFactor } from "../hooks/use-resend-two-factor.api";
 import { useCountdown } from "@/hooks/use-countdown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -60,7 +60,7 @@ export function VerifyTwoFactor() {
       { ...values, token: verificationToken },
       {
         onSuccess: (session) => {
-          setSession(session.user, session.tokens);
+          setSession(session.user, session.tokens.accessToken);
           navigate("/", { replace: true });
         },
       },
