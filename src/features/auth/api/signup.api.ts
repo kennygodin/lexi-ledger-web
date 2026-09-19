@@ -1,5 +1,5 @@
 import { apiClient } from "@/api/client.api";
-import type { AuthUser } from "../types/auth.types";
+import type { User } from "../types/auth.types";
 import type { SignupFormValues } from "../schemas/signup.schema";
 
 interface ApiEnvelope<T> {
@@ -8,15 +8,15 @@ interface ApiEnvelope<T> {
   data: T;
 }
 
-export interface SignupResponseData {
-  user: AuthUser;
+export interface RegisterResponseData {
   message: string;
+  user: User;
 }
 
 export async function signup(
   payload: SignupFormValues,
-): Promise<SignupResponseData> {
-  const { data } = await apiClient.post<ApiEnvelope<AuthUser>>(
+): Promise<RegisterResponseData> {
+  const { data } = await apiClient.post<ApiEnvelope<RegisterResponseData>>(
     "/auth/register",
     {
       name: payload.name,
@@ -25,5 +25,5 @@ export async function signup(
     },
   );
 
-  return { user: data.data, message: data.message };
+  return data.data;
 }
