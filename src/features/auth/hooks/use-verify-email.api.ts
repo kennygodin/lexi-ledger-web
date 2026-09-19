@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { verifyTwoFactor } from "@/features/auth/api/two-factor.api";
+import { verifyEmail } from "../api/verify-email.api";
 
 export function useVerifyEmail() {
   return useMutation({
-    mutationFn: verifyTwoFactor,
+    mutationFn: verifyEmail,
   });
 }

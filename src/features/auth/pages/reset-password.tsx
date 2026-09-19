@@ -1,5 +1,5 @@
 import { useForm, useWatch } from "react-hook-form";
-import { useResetPassword } from "../api/use-reset-password.api";
+import { useResetPassword } from "../hooks/use-reset-password.api";
 import {
   resetPasswordSchema,
   type ResetPasswordFormValues,
@@ -14,6 +14,7 @@ import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { AuthCard } from "../components/auth-card";
+import { toast } from "@/components/ui/toast";
 
 export function ResetPassword() {
   const navigate = useNavigate();
@@ -31,10 +32,14 @@ export function ResetPassword() {
     reset.mutate(
       {
         token: values.token,
-        password: values.password,
-        confirmPassword: values.confirmPassword,
+        newPassword: values.password,
       },
-      { onSuccess: () => navigate("/login", { replace: true }) },
+      {
+        onSuccess: (result) => {
+          toast.add({ type: "success", description: result.message });
+          navigate("/login", { replace: true });
+        },
+      },
     );
   });
 

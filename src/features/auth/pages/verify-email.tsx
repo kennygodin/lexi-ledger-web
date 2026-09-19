@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router";
-import { useAuthStore } from "../auth.store";
 import { useCountdown } from "@/hooks/use-countdown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,13 +7,14 @@ import { getErrorMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { OtpInput } from "../components/otp-input";
-import { useVerifyEmail } from "../api/use-verify-email.api";
-import { useResendVerifyEmail } from "../api/use-resend-verify-email";
+import { useVerifyEmail } from "../hooks/use-verify-email.api";
+import { useResendVerifyEmail } from "../hooks/use-resend-verify-email";
 import {
   verifyEmailSchema,
   type VerifyEmailFormValues,
 } from "../schemas/verify-email.schema";
 import { AuthCard } from "../components/auth-card";
+import { toast } from "@/components/ui/toast";
 
 function formatCountdown(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
@@ -22,22 +22,18 @@ function formatCountdown(totalSeconds: number) {
   return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
-interface VerifyTwoFactorLocationState {
+interface VerifyEmailLocationState {
   email?: string;
-  verificationToken?: string;
 }
 
 export function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
-  const setSession = useAuthStore((state) => state.setSession);
 
-  const locationState = location.state as VerifyTwoFactorLocationState | null;
-  const email = locationState?.email;
-  const verificationToken = locationState?.verificationToken;
+  const email = (location.state as VerifyEmailLocationState | null)?.email;
 
   const verifyEmail = useVerifyEmail();
-  const resendOtp = useResendVerifyEmail();
+  const resendVerification = useResendVerifyEmail();
   const { secondsLeft, restart } = useCountdown(60);
 
   const { control, handleSubmit } = useForm<VerifyEmailFormValues>({
@@ -46,25 +42,23 @@ export function VerifyEmail() {
   });
 
   const onResend = () => {
-    if (!verificationToken) return;
+    if (!email) return;
 
-    resendOtp.mutate(verificationToken, {
-      onSuccess: () => restart(),
+    resendVerification.mutate(email, {
+      onSuccess: (result) => {
+        toast.add({ type: "success", description: result.message });
+        restart();
+      },
     });
   };
 
   const onSubmit = handleSubmit((values) => {
-    if (!verificationToken) return;
-
-    verifyEmail.mutate(
-      { ...values, token: verificationToken },
-      {
-        onSuccess: (session) => {
-          setSession(session.user, session.tokens);
-          navigate("/", { replace: true });
-        },
+    verifyEmail.mutate(values.otp, {
+      onSuccess: (result) => {
+        toast.add({ type: "success", description: result.message });
+        navigate("/login", { replace: true });
       },
-    );
+    });
   });
 
   const description = (
@@ -80,7 +74,7 @@ export function VerifyEmail() {
         control={control}
         name="otp"
         length={6}
-        disabled={verifyEmail.isPending || resendOtp.isPending}
+        disabled={verifyEmail.isPending || resendVerification.isPending}
       />
 
       <p className="text-left text-xs text-muted-foreground">
@@ -90,10 +84,10 @@ export function VerifyEmail() {
           <button
             type="button"
             onClick={onResend}
-            disabled={resendOtp.isPending}
+            disabled={resendVerification.isPending}
             className="text-primary hover:underline disabled:pointer-events-none disabled:opacity-50"
           >
-            {resendOtp.isPending ? "Resending..." : "Resend code"}
+            {resendVerification.isPending ? "Resending..." : "Resend code"}
           </button>
         )}
       </p>
@@ -101,8 +95,8 @@ export function VerifyEmail() {
       {verifyEmail.isError && (
         <ErrorMessage message={getErrorMessage(verifyEmail.error)} />
       )}
-      {resendOtp.isError && (
-        <ErrorMessage message={getErrorMessage(resendOtp.error)} />
+      {resendVerification.isError && (
+        <ErrorMessage message={getErrorMessage(resendVerification.error)} />
       )}
 
       <Button

@@ -2,7 +2,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { signupSchema, type SignupFormValues } from "../schemas/signup.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSignup } from "../api/use-signup.api";
+import { useSignup } from "../hooks/use-signup.api";
 import { TextInput } from "../components/text-input";
 import { ErrorMessage } from "@/components/common/error-message";
 import { getErrorMessage } from "@/lib/errors";

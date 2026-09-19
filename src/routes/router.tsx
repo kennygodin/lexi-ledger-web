@@ -5,6 +5,8 @@ import { ForgotPassword } from "@/features/auth/pages/forgot-password";
 import { ResetPassword } from "@/features/auth/pages/reset-password";
 import { Signup } from "@/features/auth/pages/signup";
 import { VerifyEmail } from "@/features/auth/pages/verify-email";
+import { Home } from "@/features/home/pages/home";
+import { ProtectedRoute } from "./protected.routes";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +17,11 @@ export const router = createBrowserRouter([
       { path: "/verify-two-factor", element: <VerifyTwoFactor /> },
       { path: "/forgot-password", element: <ForgotPassword /> },
       { path: "/reset-password", element: <ResetPassword /> },
+
+      {
+        element: <ProtectedRoute />,
+        children: [{ path: "/", element: <Home /> }],
+      },
     ],
   },
 ]);

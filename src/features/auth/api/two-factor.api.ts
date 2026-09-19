@@ -1,7 +1,11 @@
 import { apiClient } from "@/api/client.api";
 import type { VerifyTwoFactorFormValues } from "../schemas/verify-two-factor.schema";
-import type { AuthUser } from "../types/auth.types";
-import type { AuthSession } from "./login.api";
+import type { AuthTokens, User } from "../types/auth.types";
+
+export interface AuthSession {
+  user: User;
+  tokens: AuthTokens;
+}
 
 export interface VerifyTwoFactorPayload extends VerifyTwoFactorFormValues {
   token: string;
@@ -17,7 +21,7 @@ interface VerifyTwoFactorResponseData {
   accessToken: string;
   tokenType: string;
   expiresInSeconds: number;
-  user: AuthUser;
+  user: User;
 }
 
 export async function verifyTwoFactor(

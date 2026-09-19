@@ -1,54 +1,34 @@
 import { apiClient } from "@/api/client.api";
-import type { AuthTokens, AuthUser } from "../types/auth.types";
+import type { User } from "../types/auth.types";
 import type { LoginFormValues } from "../schemas/login.schema";
 
-export interface AuthSession {
-  user: AuthUser;
-  tokens: AuthTokens;
-}
-
-export type LoginResult =
-  | { twoFactorRequired: true; verificationToken: string }
-  | { twoFactorRequired: false; session: AuthSession };
-
 interface ApiEnvelope<T> {
-  status: boolean;
-  message: string;
+  success: boolean;
+  statusCode: number;
   data: T;
 }
 
-interface LoginResponseData {
-  twoFactorRequired: boolean;
-  verificationToken?: string;
-  authentication?: {
-    accessToken: string;
-    tokenType: string;
-    expiresInSeconds: number;
-    user: AuthUser;
-  };
+interface LoginSuccessData {
+  status: "SUCCESS";
+  user: User;
+  accessToken: string;
 }
 
+interface EmailNotVerifiedData {
+  status: "EMAIL_NOT_VERIFIED";
+}
+
+export type LoginResult = LoginSuccessData | EmailNotVerifiedData;
+
 export async function login(payload: LoginFormValues): Promise<LoginResult> {
-  const { data } = await apiClient.post<ApiEnvelope<LoginResponseData>>(
+  const { data } = await apiClient.post<ApiEnvelope<LoginResult>>(
     "/auth/login",
     {
-      username: payload.email,
+      email: payload.email,
       password: payload.password,
     },
+    { headers: { "X-Client-Type": "web" } },
   );
 
-  const result = data.data;
-
-  if (!result.authentication) {
-    return {
-      twoFactorRequired: true,
-      verificationToken: result.verificationToken ?? "",
-    };
-  }
-
-  const { accessToken, user } = result.authentication;
-  return {
-    twoFactorRequired: false,
-    session: { user, tokens: { accessToken } },
-  };
+  return data.data;
 }

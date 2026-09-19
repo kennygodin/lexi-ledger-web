@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
 import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
-import { useLogin } from "../api/use-login.api";
+import { useLogin } from "../hooks/use-login.api";
 import { useAuthStore } from "../auth.store";
 import { TextInput } from "../components/text-input";
 import { ErrorMessage } from "@/components/common/error-message";
@@ -24,17 +24,12 @@ export function Login() {
   const onSubmit = handleSubmit((values) => {
     login.mutate(values, {
       onSuccess: (result) => {
-        if (result.twoFactorRequired) {
-          navigate("/verify-two-factor", {
-            state: {
-              email: values.email,
-              verificationToken: result.verificationToken,
-            },
-          });
+        if (result.status === "EMAIL_NOT_VERIFIED") {
+          navigate("/verify-email", { state: { email: values.email } });
           return;
         }
 
-        setSession(result.session.user, result.session.tokens);
+        setSession(result.user, result.accessToken);
         navigate("/", { replace: true });
       },
     });
