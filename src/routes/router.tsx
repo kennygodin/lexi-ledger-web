@@ -5,8 +5,13 @@ import { ForgotPassword } from "@/features/auth/pages/forgot-password";
 import { ResetPassword } from "@/features/auth/pages/reset-password";
 import { Signup } from "@/features/auth/pages/signup";
 import { VerifyEmail } from "@/features/auth/pages/verify-email";
-import { Home } from "@/features/home/pages/home";
 import { ProtectedRoute } from "./protected.routes";
+import { ProtectedLayout } from "@/components/layouts/protected-layout";
+import { Dashboard } from "@/features/dashboard/pages/dashboard";
+import { Statements } from "@/features/statements/pages/statments";
+import { Transactions } from "@/features/transactions/pages/transactions";
+import { Budgets } from "@/features/budgets/pages/budgets";
+import { Settings } from "@/features/settings/pages/settings";
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +25,53 @@ export const router = createBrowserRouter([
 
       {
         element: <ProtectedRoute />,
-        children: [{ path: "/", element: <Home /> }],
+        children: [
+          {
+            element: <ProtectedLayout />,
+            children: [
+              {
+                path: "/",
+                element: <Dashboard />,
+                handle: {
+                  title: "Dashboard",
+                  description: "Your spending at a glance",
+                },
+              },
+              {
+                path: "/statements",
+                element: <Statements />,
+                handle: {
+                  title: "Statements",
+                  description: "Upload and track your bank statements",
+                },
+              },
+              {
+                path: "/transactions",
+                element: <Transactions />,
+                handle: {
+                  title: "Transactions",
+                  description: "View and categorize your transactions",
+                },
+              },
+              {
+                path: "/budgets",
+                element: <Budgets />,
+                handle: {
+                  title: "Budgets",
+                  description: "Set monthly limits per category",
+                },
+              },
+              {
+                path: "/settings",
+                element: <Settings />,
+                handle: {
+                  title: "Settings",
+                  description: "Manage your account",
+                },
+              },
+            ],
+          },
+        ],
       },
     ],
   },
