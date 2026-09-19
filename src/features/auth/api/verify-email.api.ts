@@ -1,6 +1,4 @@
 import { apiClient } from "@/api/client.api";
-import type { AuthUser } from "../types/auth.types";
-import type { AuthSession } from "./login.api";
 import type { VerifyEmailFormValues } from "../schemas/verify-email.schema";
 
 export interface VerifyEmailPayload extends VerifyEmailFormValues {
@@ -13,28 +11,26 @@ interface ApiEnvelope<T> {
   data: T;
 }
 
-interface VerifyEmailResponseData {
-  accessToken: string;
-  tokenType: string;
-  expiresInSeconds: number;
-  user: AuthUser;
+interface MessageResponseData {
+  message: string;
 }
 
-export async function verifyEmail(
-  payload: VerifyEmailPayload,
-): Promise<AuthSession> {
-  const { data } = await apiClient.post<ApiEnvelope<VerifyEmailResponseData>>(
+export async function verifyEmail(token: string): Promise<MessageResponseData> {
+  const { data } = await apiClient.post<ApiEnvelope<MessageResponseData>>(
     "/auth/verify-email",
-    {
-      token: payload.token,
-      otp: payload.otp,
-    },
+    { token },
   );
 
-  const { accessToken, user } = data.data;
-  return { user, tokens: { accessToken } };
+  return data.data;
 }
 
-export async function resendVerifyEmail(token: string): Promise<void> {
-  await apiClient.post("/auth/resend-verify-email", { token: token });
+export async function resendVerifyEmail(
+  email: string,
+): Promise<MessageResponseData> {
+  const { data } = await apiClient.post<ApiEnvelope<MessageResponseData>>(
+    "/auth/resend-verification",
+    { email },
+  );
+
+  return data.data;
 }
