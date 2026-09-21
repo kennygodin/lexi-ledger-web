@@ -33,6 +33,7 @@ interface DataTableProps<TData extends RowData> {
   isError: boolean;
   noDataMessage?: string;
   onSelectionChange?: (rows: TData[]) => void;
+  columnClassNames?: Record<string, string>;
 }
 
 export function DataTable<TData extends RowData>({
@@ -42,6 +43,7 @@ export function DataTable<TData extends RowData>({
   isError,
   noDataMessage = "No data available.",
   onSelectionChange,
+  columnClassNames,
 }: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = useState({});
 
