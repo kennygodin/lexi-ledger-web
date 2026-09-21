@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/features/auth/auth.store";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthBootstrap } from "@/features/auth/hooks/use-auth-bootstrap";
 
@@ -7,6 +7,7 @@ export function ProtectedRoute() {
   useAuthBootstrap();
 
   const status = useAuthStore((state) => state.status);
+  const location = useLocation();
 
   if (status === "loading") {
     return (
@@ -17,7 +18,7 @@ export function ProtectedRoute() {
   }
 
   if (status === "unauthenticated") {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <Outlet />;

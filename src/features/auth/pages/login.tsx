@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { loginSchema, type LoginFormValues } from "../schemas/login.schema";
 import { useLogin } from "../hooks/use-login.api";
 import { useAuthStore } from "../auth.store";
@@ -11,10 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { AuthCard } from "../components/auth-card";
 
+interface LoginLocationState {
+  from?: { pathname: string; search: string };
+}
+
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const login = useLogin();
   const setSession = useAuthStore((state) => state.setSession);
+  const from = (location.state as LoginLocationState | null)?.from;
 
   const { control, handleSubmit } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -30,7 +36,9 @@ export function Login() {
         }
 
         setSession(result.user, result.accessToken);
-        navigate("/", { replace: true });
+        navigate(from ? `${from.pathname}${from.search}` : "/", {
+          replace: true,
+        });
       },
     });
   });

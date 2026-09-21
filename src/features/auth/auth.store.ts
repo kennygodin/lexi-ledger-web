@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type {  User } from "./types/auth.types";
+import type { User } from "./types/auth.types";
+import { queryClient } from "@/api/query-client.api";
 
 type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
@@ -21,8 +22,12 @@ export const useAuthStore = create<AuthState>()(
       status: "loading",
       setSession: (user, accessToken) =>
         set({ user, accessToken, status: "authenticated" }),
-      setAccessToken: (accessToken) => set({ accessToken, status: "authenticated" }),
-      clear: () => set({ user: null, accessToken: null, status: "unauthenticated" }),
+      setAccessToken: (accessToken) =>
+        set({ accessToken, status: "authenticated" }),
+      clear: () => {
+        queryClient.clear();
+        set({ user: null, accessToken: null, status: "unauthenticated" });
+      },
     }),
     {
       name: "auth",

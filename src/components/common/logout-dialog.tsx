@@ -32,7 +32,7 @@ export function LogoutDialog({ open, onClose }: LogoutDialogProps) {
       onSettled: () => {
         clear();
         onClose();
-        navigate("/login", { replace: true });
+        navigate("/login", { state: { from: location }, replace: true });
       },
     });
   };
@@ -42,7 +42,7 @@ export function LogoutDialog({ open, onClose }: LogoutDialogProps) {
       onSuccess: () => {
         clear();
         onClose();
-        navigate("/login", { replace: true });
+        navigate("/login", { state: { from: location }, replace: true });
       },
     });
   };
