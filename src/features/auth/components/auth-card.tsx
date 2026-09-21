@@ -20,7 +20,7 @@ export function AuthCard({
       <Card className="w-full max-w-md p-8">
         <CardHeader className="flex flex-col gap-6 p-0">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center bg-primary">
+            <div className="flex size-10 shrink-0 items-center justify-center bg-primary text-primary-foreground">
               <HugeiconsIcon icon={Invoice03Icon} className="size-6" />
             </div>
             <div>
@@ -29,7 +29,7 @@ export function AuthCard({
           </div>
 
           <div>
-            <p className="text-2xl font-bold">{title}</p>
+            <p className="text-2xl font-semibold">{title}</p>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </div>
         </CardHeader>

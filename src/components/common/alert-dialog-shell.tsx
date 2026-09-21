@@ -60,7 +60,7 @@ export function AlertDialogShell({
         <div className="flex items-start gap-3 p-6 pb-3">
           <div
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full",
+              "flex size-10 shrink-0 items-center justify-center rounded-none",
               style.iconWrap,
             )}
           >
