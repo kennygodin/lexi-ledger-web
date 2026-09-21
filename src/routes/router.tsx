@@ -32,42 +32,22 @@ export const router = createBrowserRouter([
               {
                 path: "/",
                 element: <Dashboard />,
-                handle: {
-                  title: "Dashboard",
-                  description: "Your spending at a glance",
-                },
               },
               {
                 path: "/statements",
                 element: <Statements />,
-                handle: {
-                  title: "Statements",
-                  description: "Upload and track your bank statements",
-                },
               },
               {
                 path: "/transactions",
                 element: <Transactions />,
-                handle: {
-                  title: "Transactions",
-                  description: "View and categorize your transactions",
-                },
               },
               {
                 path: "/budgets",
                 element: <Budgets />,
-                handle: {
-                  title: "Budgets",
-                  description: "Set monthly limits per category",
-                },
               },
               {
                 path: "/settings",
                 element: <Settings />,
-                handle: {
-                  title: "Settings",
-                  description: "Manage your account",
-                },
               },
             ],
           },
