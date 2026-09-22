@@ -1,5 +1,5 @@
 import type { DataTableColumnDef } from "@/components/common/data-table";
-import type { Transaction } from "../types/transactions.types";
+import type { Transaction } from "@/features/transactions/types/transactions.types";
 import {
   DateCell,
   TypeCell,
@@ -9,7 +9,7 @@ import {
   TransactionActionsCell,
 } from "@/components/common/transaction-cells";
 
-export const transactionsColumns: DataTableColumnDef<Transaction>[] = [
+export const statementTransactionsColumns: DataTableColumnDef<Transaction>[] = [
   {
     accessorKey: "date",
     header: "Date",

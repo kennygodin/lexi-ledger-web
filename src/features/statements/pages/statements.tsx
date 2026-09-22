@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { useStatements } from "../hooks/use-statements";
 import { DataTable } from "@/components/common/data-table";
-import { statementsColumns } from "../components/statements.columns";
 import { Pagination } from "@/components/common/pagination";
 import {
   Empty,
@@ -17,6 +16,7 @@ import { File02Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/layouts/page-header";
 import { UploadStatementDialog } from "../components/upload-statement-dialog";
+import { statementsColumns } from "../components/statements.columns";
 
 export function Statements() {
   const [searchParams] = useSearchParams();
@@ -71,7 +71,6 @@ export function Statements() {
           <DataTable
             columns={statementsColumns}
             data={data?.statements ?? []}
-            columnClassNames={{ filename: "w-full" }}
             isLoading={isLoading}
             isError={isError}
             noDataMessage="No statement record match these filters."

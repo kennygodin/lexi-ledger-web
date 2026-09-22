@@ -75,7 +75,7 @@ export function AppSidebar() {
                       isActive={isNavItemActive(location.pathname, item.url)}
                       tooltip={item.title}
                       render={<Link to={item.url} />}
-                      className="border-l-2 border-transparent h-10 pl-3 text-base text-sidebar-foreground [&_svg]:size-5 data-active:border-sidebar-primary data-active:bg-sidebar-primary/10 data-active:font-semibold data-active:sidetext-sidebar-primary"
+                      className="border-l-2 border-transparent h-10 pl-3 text-base text-sidebar-foreground [&_svg]:size-5 data-active:border-sidebar-primary data-active:bg-sidebar-primary/10 data-active:font-medium data-active:sidetext-sidebar-primary"
                     >
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>

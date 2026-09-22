@@ -33,7 +33,6 @@ interface DataTableProps<TData extends RowData> {
   isError: boolean;
   noDataMessage?: string;
   onSelectionChange?: (rows: TData[]) => void;
-  columnClassNames?: Record<string, string>;
 }
 
 export function DataTable<TData extends RowData>({
@@ -96,11 +95,14 @@ export function DataTable<TData extends RowData>({
   return (
     <div className="overflow-hidden">
       <Table>
-        <TableHeader className="">
+        <TableHeader className="bg-muted">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="border-b-0 text-sm">
+            <TableRow key={headerGroup.id} className="border-b-0 hover:bg-muted">
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  className={(header.column.columnDef.meta as { className?: string } | undefined)?.className}
+                >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext(),
@@ -116,7 +118,10 @@ export function DataTable<TData extends RowData>({
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} className="border-b-0">
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    className={(cell.column.columnDef.meta as { className?: string } | undefined)?.className}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
