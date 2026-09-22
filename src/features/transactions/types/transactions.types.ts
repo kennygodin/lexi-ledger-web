@@ -23,3 +23,12 @@ export interface Transaction {
   confidence: number;
   createdAt: string;
 }
+
+export interface CategoryCorrection {
+  id: string;
+  transactionId: string;
+  userId: string;
+  previousCategory: TransactionCategory;
+  newCategory: TransactionCategory;
+  correctedAt: string;
+}

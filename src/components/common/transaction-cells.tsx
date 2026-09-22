@@ -37,6 +37,8 @@ import { ErrorMessage } from "@/components/common/error-message";
 import { getErrorMessage } from "@/lib/errors";
 import { toast } from "@/components/ui/toast";
 import { useUpdateTransactionCategory } from "@/features/transactions/hooks/use-update-transaction-category";
+import { useTransactionCorrections } from "@/features/transactions/hooks/use-transaction-corrections";
+import { Skeleton } from "../ui/skeleton";
 
 export const CATEGORY_LABELS: Record<TransactionCategory, string> = {
   food: "Food",
@@ -220,6 +222,65 @@ function CorrectCategoryDialog({
   );
 }
 
+function CorrectionHistoryDialog({
+  transaction,
+  open,
+  onClose,
+}: {
+  transaction: Transaction;
+  open: boolean;
+  onClose: () => void;
+}) {
+  const { data, isLoading, isError, error } = useTransactionCorrections(
+    transaction.id,
+    open,
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Category history</DialogTitle>
+          <DialogDescription>
+            Every category correction made to &quot;{transaction.description}
+            &quot;.
+          </DialogDescription>
+        </DialogHeader>
+
+        {isLoading ? (
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        ) : isError ? (
+          <ErrorMessage message={getErrorMessage(error)} />
+        ) : data && data.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {data.map((entry) => (
+              <li
+                key={entry.id}
+                className="flex items-center justify-between gap-2 border border-border p-2 text-xs"
+              >
+                <span>
+                  {CATEGORY_LABELS[entry.previousCategory]} →{" "}
+                  {CATEGORY_LABELS[entry.newCategory]}
+                </span>
+                <span className="text-muted-foreground">
+                  {formatTransactionDate(entry.correctedAt)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No corrections have been made to this transaction yet.
+          </p>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function TransactionActionsCell({
   transaction,
 }: {
@@ -227,6 +288,7 @@ export function TransactionActionsCell({
 }) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [correctOpen, setCorrectOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   return (
     <>
@@ -248,11 +310,14 @@ export function TransactionActionsCell({
           </button>
           <button
             type="button"
-            disabled
-            className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-xs text-muted-foreground opacity-50"
+            onClick={() => {
+              setPopoverOpen(false);
+              setHistoryOpen(true);
+            }}
+            className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-xs hover:bg-accent hover:text-accent-foreground"
           >
             <HugeiconsIcon icon={HistoryIcon} className="size-3.5" />
-            Audit history
+            View history
           </button>
         </PopoverContent>
       </Popover>
@@ -261,6 +326,11 @@ export function TransactionActionsCell({
         transaction={transaction}
         open={correctOpen}
         onClose={() => setCorrectOpen(false)}
+      />
+      <CorrectionHistoryDialog
+        transaction={transaction}
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
       />
     </>
   );
