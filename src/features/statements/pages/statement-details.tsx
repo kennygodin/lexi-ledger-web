@@ -20,7 +20,7 @@ import {
   ArrowDown01Icon,
   Wallet01Icon,
 } from "@hugeicons/core-free-icons";
-import { statementTransactionsColumns } from "../components/statements.columns";
+import { statementTransactionsColumns } from "../components/statement-transactions.column";
 
 export function StatementDetails() {
   const { id } = useParams<{ id: string }>();
