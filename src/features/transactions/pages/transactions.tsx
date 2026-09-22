@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router";
 import { useTransactions } from "../hooks/use-transactions";
 import { DataTable } from "@/components/common/data-table";
 import { Pagination } from "@/components/common/pagination";
+
 import {
   Empty,
   EmptyHeader,
@@ -13,13 +14,33 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Exchange01Icon } from "@hugeicons/core-free-icons";
 import { PageHeader } from "@/components/layouts/page-header";
 import { transactionsColumns } from "../components/transactions.column";
+import {
+  DateRangeFilter,
+  type DateRangeValue,
+} from "@/components/common/date-range-filter";
 
 export function Transactions() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const dateRange: DateRangeValue = {
+    from: searchParams.get("from") ?? undefined,
+    to: searchParams.get("to") ?? undefined,
+  };
+
+  const handleApplyDateRange = (next: DateRangeValue) => {
+    setSearchParams((prev) => {
+      if (next.from) prev.set("from", next.from);
+      else prev.delete("from");
+      if (next.to) prev.set("to", next.to);
+      else prev.delete("to");
+      return prev;
+    });
+  };
 
   const params = {
     page: Number(searchParams.get("page") ?? 1),
     limit: Number(searchParams.get("limit") ?? 20),
+    ...dateRange,
   };
 
   const { data, isLoading, isError } = useTransactions(params);
@@ -31,6 +52,9 @@ export function Transactions() {
       <PageHeader
         title="Transactions"
         description="View and categorize your transactions"
+        action={
+          <DateRangeFilter value={dateRange} onApply={handleApplyDateRange} />
+        }
       />
 
       {isEmpty ? (

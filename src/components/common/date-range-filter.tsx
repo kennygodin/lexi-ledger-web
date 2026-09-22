@@ -30,8 +30,6 @@ export function DateRangeFilter({ value, onApply }: DateRangeFilterProps) {
   const [from, setFrom] = useState<Date | undefined>();
   const [to, setTo] = useState<Date | undefined>();
 
-  // Re-sync the modal's local state to the applied filter every time it opens,
-  // so a stale selection from a previous open doesn't linger.
   useEffect(() => {
     if (open) {
       setFrom(value.from ? new Date(value.from) : undefined);

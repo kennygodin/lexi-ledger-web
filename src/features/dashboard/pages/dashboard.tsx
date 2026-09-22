@@ -27,7 +27,7 @@ import { CategoryBreakdownChart } from "../components/category-breakdown-chart";
 import {
   DateRangeFilter,
   type DateRangeValue,
-} from "../components/date-range-filter";
+} from "../../../components/common/date-range-filter";
 
 export function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +56,7 @@ export function Dashboard() {
     data: latest,
     isLoading: transactionsLoading,
     isError: transactionsError,
-  } = useTransactions({ page: 1, limit: 5 });
+  } = useTransactions({ page: 1, limit: 5, ...dateRange });
 
   const isEmpty =
     !overviewLoading && !overviewError && data?.totalTransactions === 0;
