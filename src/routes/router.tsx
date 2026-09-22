@@ -13,6 +13,7 @@ import { Transactions } from "@/features/transactions/pages/transactions";
 import { Budgets } from "@/features/budgets/pages/budgets";
 import { Settings } from "@/features/settings/pages/settings";
 import { StatementDetails } from "@/features/statements/pages/statement-details";
+import { Profile } from "@/features/profile/pages/profile";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
               {
                 path: "/settings",
                 element: <Settings />,
+              },
+              {
+                path: "/profile",
+                element: <Profile />,
               },
             ],
           },

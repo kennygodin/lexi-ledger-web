@@ -2,9 +2,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  status: string;
-  twoFactorEnabled: boolean;
-  role: "user";
+  role: "user" | "admin";
+  emailVerifiedAt: string | null;
 }
 
 export interface AuthTokens {

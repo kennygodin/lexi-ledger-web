@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import type { User } from "./types/auth.types";
 import { queryClient } from "@/api/query-client.api";
 
@@ -11,27 +10,21 @@ interface AuthState {
   status: AuthStatus;
   setSession: (user: User, accessToken: string) => void;
   setAccessToken: (accessToken: string) => void;
+  setUser: (user: User) => void;
   clear: () => void;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      accessToken: null,
-      status: "loading",
-      setSession: (user, accessToken) =>
-        set({ user, accessToken, status: "authenticated" }),
-      setAccessToken: (accessToken) =>
-        set({ accessToken, status: "authenticated" }),
-      clear: () => {
-        queryClient.clear();
-        set({ user: null, accessToken: null, status: "unauthenticated" });
-      },
-    }),
-    {
-      name: "auth",
-      partialize: (state) => ({ user: state.user }),
-    },
-  ),
-);
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  accessToken: null,
+  status: "loading",
+  setSession: (user, accessToken) =>
+    set({ user, accessToken, status: "authenticated" }),
+  setAccessToken: (accessToken) =>
+    set({ accessToken, status: "authenticated" }),
+  setUser: (user) => set({ user }),
+  clear: () => {
+    queryClient.clear();
+    set({ user: null, accessToken: null, status: "unauthenticated" });
+  },
+}));
