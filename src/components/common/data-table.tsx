@@ -43,7 +43,6 @@ export function DataTable<TData extends RowData>({
   isError,
   noDataMessage = "No data available.",
   onSelectionChange,
-  columnClassNames,
 }: DataTableProps<TData>) {
   const [rowSelection, setRowSelection] = useState({});
 
