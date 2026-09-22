@@ -10,3 +10,10 @@ export interface Statement {
   failureReason: string | null;
   uploadedAt: string;
 }
+
+export interface StatementStats {
+  totalTransactions: number;
+  totalCredit: number;
+  totalDebit: number;
+  net: number;
+}
