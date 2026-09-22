@@ -1,4 +1,5 @@
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 interface StatTileProps {
@@ -7,6 +8,7 @@ interface StatTileProps {
   icon?: IconSvgElement;
   iconClassName?: string;
   className?: string;
+  isLoading?: boolean;
 }
 
 export function StatTile({
@@ -15,6 +17,7 @@ export function StatTile({
   icon,
   iconClassName,
   className,
+  isLoading = false,
 }: StatTileProps) {
   return (
     <div
@@ -25,7 +28,11 @@ export function StatTile({
     >
       <div>
         <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="mt-1 text-2xl font-semibold">{value}</p>
+        {isLoading ? (
+          <Skeleton className="mt-1 h-8 w-20" />
+        ) : (
+          <p className="mt-1 text-2xl">{value}</p>
+        )}
       </div>
 
       {icon && (
