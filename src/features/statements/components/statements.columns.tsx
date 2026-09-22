@@ -53,7 +53,6 @@ export const statementsColumns: DataTableColumnDef<Statement>[] = [
   {
     accessorKey: "filename",
     header: "Bank Statement",
-    meta: { className: "w-full" },
     cell: (props) => {
       const statement = props.row.original;
       return (
