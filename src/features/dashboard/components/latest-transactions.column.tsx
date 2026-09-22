@@ -17,11 +17,15 @@ export const latestTransactionsColumns: DataTableColumnDef<Transaction>[] = [
     accessorKey: "description",
     header: "Description",
     cell: (props) => (
-      <span className="text-sm text-foreground">
+      <span
+        className="block max-w-32 truncate text-sm text-foreground"
+        title={props.getValue<string>()}
+      >
         {props.getValue<string>()}
       </span>
     ),
   },
+
   {
     accessorKey: "type",
     header: "Type",

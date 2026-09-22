@@ -19,7 +19,10 @@ export const statementTransactionsColumns: DataTableColumnDef<Transaction>[] = [
     accessorKey: "description",
     header: "Description",
     cell: (props) => (
-      <span className="text-sm text-foreground">
+      <span
+        className="block max-w-52 truncate text-sm text-foreground"
+        title={props.getValue<string>()}
+      >
         {props.getValue<string>()}
       </span>
     ),

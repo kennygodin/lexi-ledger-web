@@ -36,7 +36,7 @@ const NAV_ITEMS: NavItem[] = [
   { title: "Statements", url: "/statements", icon: File02Icon },
   { title: "Transactions", url: "/transactions", icon: Exchange01Icon },
   { title: "Budgets", url: "/budgets", icon: Wallet01Icon },
-  { title: "Settings", url: "/settings", icon: Settings01Icon },
+  { title: "Profile", url: "/profile", icon: Settings01Icon },
 ];
 
 function isNavItemActive(pathname: string, url: string) {

@@ -1,13 +1,23 @@
 import { apiClient } from "@/api/client.api";
 import type {
+  CategoryCorrection,
   Transaction,
   TransactionCategory,
 } from "../types/transactions.types";
 import type { ApiEnvelope, PaginatedEnvelope } from "./types";
 
+export async function getTransactionCorrections(id: string) {
+  const { data } = await apiClient.get<ApiEnvelope<CategoryCorrection[]>>(
+    `/transactions/${id}/corrections`,
+  );
+  return data.data;
+}
+
 export interface ListTransactionsParams {
   page?: number;
   limit?: number;
+  from?: string;
+  to?: string;
 }
 
 export async function listTransactions(params: ListTransactionsParams = {}) {
