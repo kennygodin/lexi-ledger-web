@@ -1,10 +1,36 @@
 import { apiClient } from "@/api/client.api";
-import type { Statement } from "../types/statements.types";
+import type { Statement, StatementStats } from "../types/statements.types";
 import type { ApiEnvelope, PaginatedEnvelope } from "./types";
+import type { Transaction } from "@/features/transactions/types/transactions.types";
 
 export interface ListStatementsParams {
   page?: number;
   limit?: number;
+}
+
+export interface ListStatementTransactionsParams {
+  page?: number;
+  limit?: number;
+}
+
+export async function getStatementTransactions(
+  id: string,
+  params: ListStatementTransactionsParams = {},
+) {
+  const { data } = await apiClient.get<PaginatedEnvelope<Transaction>>(
+    `/statements/${id}/transactions`,
+    { params },
+  );
+
+  return { transactions: data.data, meta: data.meta };
+}
+
+export async function getStatementStats(id: string) {
+  const { data } = await apiClient.get<ApiEnvelope<StatementStats>>(
+    `/statements/${id}/stats`,
+  );
+
+  return data.data;
 }
 
 export async function uploadStatement(

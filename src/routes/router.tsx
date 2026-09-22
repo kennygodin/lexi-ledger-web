@@ -12,6 +12,7 @@ import { Statements } from "@/features/statements/pages/statements";
 import { Transactions } from "@/features/transactions/pages/transactions";
 import { Budgets } from "@/features/budgets/pages/budgets";
 import { Settings } from "@/features/settings/pages/settings";
+import { StatementDetails } from "@/features/statements/pages/statement-details";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
               {
                 path: "/statements",
                 element: <Statements />,
+              },
+              {
+                path: "/statements/:id",
+                element: <StatementDetails />,
               },
               {
                 path: "/transactions",
