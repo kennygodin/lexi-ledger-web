@@ -1,4 +1,4 @@
-import { Cell, Pie, PieChart } from "recharts";
+import { Pie, PieChart } from "recharts";
 import {
   ChartContainer,
   ChartTooltip,
@@ -56,7 +56,10 @@ interface CategoryBreakdownChartProps {
 export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
   const present = new Set(data.map((entry) => entry.category));
   const rows = CATEGORY_ORDER.filter((category) => present.has(category)).map(
-    (category) => data.find((entry) => entry.category === category)!,
+    (category) => ({
+      ...data.find((entry) => entry.category === category)!,
+      fill: `var(--color-${category})`,
+    }),
   );
 
   if (rows.length === 0) {
@@ -68,10 +71,7 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
   }
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="mx-auto aspect-square max-h-56"
-    >
+    <ChartContainer config={chartConfig} className="mx-auto h-80 w-full">
       <PieChart>
         <ChartTooltip
           content={
@@ -97,18 +97,19 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
           data={rows}
           dataKey="total"
           nameKey="category"
-          innerRadius={45}
-          outerRadius={75}
+          innerRadius="55%"
+          outerRadius="85%"
           paddingAngle={2}
-        >
-          {rows.map((entry) => (
-            <Cell
-              key={entry.category}
-              fill={`var(--color-${entry.category})`}
+        />
+
+        <ChartLegend
+          content={
+            <ChartLegendContent
+              nameKey="category"
+              className="flex-wrap gap-x-3 gap-y-1.5"
             />
-          ))}
-        </Pie>
-        <ChartLegend content={<ChartLegendContent nameKey="category" />} />
+          }
+        />
       </PieChart>
     </ChartContainer>
   );

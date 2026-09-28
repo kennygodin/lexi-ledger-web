@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 
 interface PaginationProps {
   total: number;
+  page: number;
+  limit: number;
   perPageOptions: number[];
   className?: string;
 }
@@ -21,11 +23,10 @@ export function Pagination({
   total,
   className,
   perPageOptions,
+  page,
+  limit,
 }: PaginationProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const page = Number(searchParams.get("page") ?? 1);
-  const limit = Number(searchParams.get("limit") ?? 10);
+  const [, setSearchParams] = useSearchParams();
 
   const totalPages = Math.ceil(total / limit);
 

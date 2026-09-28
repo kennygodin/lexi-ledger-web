@@ -82,7 +82,9 @@ export function Transactions() {
           {!isError && !isLoading && (
             <Pagination
               total={data?.meta.total ?? 0}
-              perPageOptions={[10, 20, 50, 100]}
+              page={params.page}
+              limit={params.limit}
+              perPageOptions={[10, 20, 50]}
             />
           )}
         </>

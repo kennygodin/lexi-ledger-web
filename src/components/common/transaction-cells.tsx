@@ -173,6 +173,7 @@ function CorrectCategoryDialog({
         </DialogHeader>
 
         <Select
+          items={CATEGORY_LABELS}
           value={category}
           onValueChange={(value) =>
             value && setCategory(value as TransactionCategory)

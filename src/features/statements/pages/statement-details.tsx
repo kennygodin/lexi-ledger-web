@@ -32,7 +32,7 @@ export function StatementDetails() {
   };
 
   const { data: statement } = useStatement(id!);
-  const { data: stats } = useStatementStats(id!);
+  const { data: stats, isLoading: statsLoading } = useStatementStats(id!);
   const { data, isLoading, isError } = useStatementTransactions(id!, params);
 
   return (
@@ -58,23 +58,27 @@ export function StatementDetails() {
           label="Transactions"
           value={stats ? String(stats.totalTransactions) : "—"}
           icon={Exchange01Icon}
+          isLoading={statsLoading}
         />
         <StatTile
           label="Total credit"
           value={stats ? formatNaira(stats.totalCredit) : "—"}
           icon={ArrowUp01Icon}
           iconClassName="bg-primary/10 text-primary"
+          isLoading={statsLoading}
         />
         <StatTile
           label="Total debit"
           value={stats ? formatNaira(stats.totalDebit) : "—"}
           icon={ArrowDown01Icon}
           iconClassName="bg-destructive/10 text-destructive"
+          isLoading={statsLoading}
         />
         <StatTile
           label="Net"
           value={stats ? formatNaira(stats.net) : "—"}
           icon={Wallet01Icon}
+          isLoading={statsLoading}
         />
       </div>
 
@@ -88,6 +92,8 @@ export function StatementDetails() {
       {!isError && !isLoading && (
         <Pagination
           total={data?.meta.total ?? 0}
+          page={params.page}
+          limit={params.limit}
           perPageOptions={[10, 20, 50]}
         />
       )}
