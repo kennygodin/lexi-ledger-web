@@ -79,7 +79,9 @@ export function Statements() {
           {!isError && !isLoading && (
             <Pagination
               total={data?.meta.total ?? 0}
-              perPageOptions={[5, 10, 20, 50]}
+              page={params.page}
+              limit={params.limit}
+              perPageOptions={[10, 20, 50]}
             />
           )}
         </>

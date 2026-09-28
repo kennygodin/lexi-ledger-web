@@ -15,6 +15,9 @@ export function useUpdateTransactionCategory() {
     }) => updateTransactionCategory(id, category),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["statements"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
     },
   });
 }
